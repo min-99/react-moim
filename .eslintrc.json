@@ -1,0 +1,40 @@
+{
+    "env": {
+      "browser": true,
+      "es2021": true,
+      "node": true,
+      "jest": true
+    },
+    "extends": [
+      "next",
+      "plugin:react/recommended",
+      "standard",
+      "plugin:prettier/recommended",
+      "plugin:react-hooks/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": 12,
+      "sourceType": "module"
+    },
+    "plugins": ["react", "@typescript-eslint", "jest", "prettier", "react-hooks"],
+    "rules": {
+      "no-use-before-define": "off",
+      "no-unused-vars": "warn",
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+      "valid-typeof": "off",
+      "react/no-unescaped-entities": "warn",
+      "eslint-disable @next/next/no-img-element": "off",
+      "@next/next/no-img-element": "off"
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    }
+  }
+  

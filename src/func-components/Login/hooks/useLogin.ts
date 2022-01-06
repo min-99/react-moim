@@ -9,7 +9,7 @@ import localforage from 'localforage';
 
 function useLogin() {
   const storage = localforage.createInstance({
-    name: '_checkedId',
+    name: 'id',
     driver: localforage.LOCALSTORAGE,
   });
   const hookForm = useForm({
