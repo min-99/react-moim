@@ -16,7 +16,7 @@ class RootDocument extends Document {
     const sheet = new ServerStyleSheet();
     // const uiSheet = new UIStyledComponents.ServerStyleSheet();
 
-    const originalRenderPage = ctx.renderPage;
+    // const originalRenderPage = ctx.renderPage;
     try {
       // ctx.renderPage = () =>
       //   originalRenderPage({

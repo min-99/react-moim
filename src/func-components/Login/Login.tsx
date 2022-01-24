@@ -1,63 +1,103 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
-import { hasFieldError, hasFieldErrors } from '@/utils';
-import { Button, TextField } from '@mui/material';
+import { getFieldErrorMessage, hasFieldError, hasFieldErrors } from '@/utils';
+import { Button, Container, TextField, Typography } from '@mui/material';
 import { REG_EXP } from '@/constants';
+import Grid from '@mui/material/Grid';
+import { Box } from '@mui/system';
+import ErrorText from '@/components/ErrorText/ErrorText';
+import useLogin from './hooks/useLogin';
+
+interface ErrorContainerProps {
+  message: string | undefined;
+  isShow: boolean;
+}
+
+function ErrorContainer({ message, isShow }: ErrorContainerProps) {
+  return (
+    <>
+      {isShow && (
+        <>
+          <Grid item xs={2}></Grid>
+          <Grid item xs={10}>
+            <ErrorText message={message ?? ''}></ErrorText>
+          </Grid>
+        </>
+      )}
+    </>
+  );
+}
 
 function Login() {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-      } = useForm();
-      const onSubmit = (data : any) => console.log(data);
+  const { hookForm, handleLogin, isLoadingLogin } = useLogin();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = hookForm;
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-      <TextField
-          hiddenLabel
-          variant="standard"
-          placeholder="email"
-          size="small"
-          {...register('email', {
-            required: {
-              value: true,
-              message: '아이디를 입력해주세요',
-            },
-            pattern : REG_EXP.email
-          })}
-          error={hasFieldError(errors, 'email')}
-        />
-        <TextField
-          hiddenLabel
-          type="password"
-          variant="standard"
-          placeholder="password (영문/숫자/특수문자, 8~16자)"
-          size="small"
-          {...register('password', {
-            required: {
-              value: true,
-              message: '아이디를 입력해주세요',
-            },
-            pattern : REG_EXP.password
-          })}
-          error={hasFieldError(errors, 'password')}
-        />
-        {/* <FormInput
-          placeholder="아이디"
-          mb="20px"
-          sizeVariant="md"
-          offAutoFill
-          maxLength={20}
-          {...register('id', {
-            required: {
-              value: true,
-              message: '아이디를 입력해주세요',
-            },
-          })}
-          error={hasFieldError(errors, 'id') || !isLoginSuccess}
-          message={hasFieldError(errors, 'id') ? '아이디를 입력해주세요' : ''}
-        /> */}
+    <Box padding="114px 50px" width="100%">
+      <form onSubmit={handleSubmit(handleLogin)}>
+        {/* -- email -- */}
+        <Grid container spacing="5px">
+          <Grid item xs={2}>
+            <Typography variant="h4">Email</Typography>
+          </Grid>
+          <Grid item xs={10}>
+            <TextField
+              hiddenLabel
+              variant="standard"
+              size="small"
+              fullWidth
+              placeholder="Email"
+              {...register('email', {
+                required: {
+                  value: true,
+                  message: '이메일을 입력해주세요',
+                },
+                pattern: {
+                  value: REG_EXP.email,
+                  message: '유효하지 않은 이메일 형식입니다',
+                },
+              })}
+              error={hasFieldError(errors, 'email')}
+            />
+          </Grid>
+          <ErrorContainer
+            message={getFieldErrorMessage(errors, 'email')}
+            isShow={hasFieldError(errors, 'email')}
+          />
+
+          {/* -- password -- */}
+          <Grid item xs={2}>
+            <Typography variant="h4">PW</Typography>
+          </Grid>
+          <Grid item xs={10}>
+            <TextField
+              hiddenLabel
+              type="password"
+              variant="standard"
+              placeholder="(영문/숫자/특수문자, 8~16자)"
+              fullWidth
+              size="small"
+              {...register('password', {
+                required: {
+                  value: true,
+                  message: '비밀번호를 입력해주세요',
+                },
+                pattern: {
+                  value: REG_EXP.password,
+                  message:
+                    '비밀번호는 영문/숫자/특수문자 8 ~ 16자 이어야 합니다',
+                },
+              })}
+              error={hasFieldError(errors, 'password')}
+            />
+          </Grid>
+          <ErrorContainer
+            message={getFieldErrorMessage(errors, 'password')}
+            isShow={hasFieldError(errors, 'password')}
+          />
+        </Grid>
         {/* {!isLoginSuccess && (
           <HStack ml="14px" alignment="center" mb="24px">
             <SvgIcon
@@ -75,9 +115,20 @@ function Login() {
             </Text>
           </HStack>
         )} */}
-        <Button type="submit" variant="contained" disabled={hasFieldErrors(errors, ['id', 'password'])}>LOGIN</Button>
+        <Container style={{ marginTop: '35px', padding: '0' }}>
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            disabled={
+              hasFieldErrors(errors, ['id', 'password']) || isLoadingLogin
+            }
+          >
+            LOGIN
+          </Button>
+        </Container>
       </form>
-    </div>
+    </Box>
   );
 }
 

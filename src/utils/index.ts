@@ -10,7 +10,7 @@ export const isDeploy = () => process.env.NODE_ENV === 'production';
 /**
  * 외부링크 새창 오픈
  */
- export const handleGoExternalLink = (link: string) => {
+export const handleGoExternalLink = (link: string) => {
   (window.open('about:blank') as any).location.href = link;
 };
 
@@ -32,4 +32,11 @@ export const hasFieldErrors = (errors: FieldErrors, fieldNames: string[]) => {
   return (
     fieldNames.findIndex((fieldName) => hasFieldError(errors, fieldName)) >= 0
   );
+};
+
+export const getFieldErrorMessage = (
+  errors: FieldErrors,
+  fieldName: string,
+) => {
+  return getObjectErrorByFieldName(errors, fieldName)?.message || '';
 };

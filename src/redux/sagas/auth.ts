@@ -1,22 +1,61 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { AuthAction, loginAction } from '@/redux/reducers/auth';
+import {
+  AuthAction,
+  loginProcAction,
+  loginRequestAction,
+  loginSuccessAction,
+  logoutRequestAction,
+  logoutSuccessAction,
+} from '@/redux/reducers/auth';
+import { relayLogin, relayLogout } from '@/api';
 import { API_DEFAULT_ERROR_RESPONSE } from '@/constants';
-import { login } from '@/api';
+import { isServer } from '@/utils';
+import { getDecodeToken } from '@/service/authService';
 
-function* loginSaga(action: AuthAction) {
+function* loginProcSaga(action: AuthAction) {
   try {
-    const { data } = yield call(login, { ...action.payload });
+    const { data } = yield call(relayLogin, { ...action.payload });
     if (data?.code === 200) {
-      yield put(loginAction.success(data?.data));
+      const { accessToken } = data?.data;
+      yield put(loginProcAction.success(data));
+      yield put(loginRequestAction({ accessToken }));
     } else {
-      yield put(loginAction.failure(data?.data));
+      yield put(loginProcAction.failure(data));
     }
   } catch (error) {
     console.error('Error : ', error);
-    yield put(loginAction.failure(API_DEFAULT_ERROR_RESPONSE));
+    yield put(loginProcAction.failure(API_DEFAULT_ERROR_RESPONSE));
+  }
+}
+
+function* loginSaga(action: AuthAction) {
+  const { accessToken } = action.payload;
+  const decodeToken = getDecodeToken(accessToken);
+
+  yield put(
+    loginSuccessAction({
+      accessToken,
+      memberId: decodeToken?.memberId || 0,
+      companyId: decodeToken?.companyId || 0,
+    }),
+  );
+}
+
+function* logoutSaga() {
+  if (isServer()) {
+    yield put(logoutSuccessAction(0));
+  } else {
+    const { data } = yield call(relayLogout);
+    if (data?.code === 200) {
+      yield put(logoutSuccessAction(0));
+    }
   }
 }
 
 export default function* authSaga() {
-  yield takeLatest(loginAction.request, loginSaga);
+  yield takeLatest(loginProcAction.request, loginProcSaga);
+
+  yield takeLatest(loginRequestAction, loginSaga);
+
+  yield takeLatest(logoutRequestAction, logoutSaga);
 }

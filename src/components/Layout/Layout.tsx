@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { RootAppDefaultPagePropsType } from '@pages/_app';
@@ -24,7 +24,6 @@ export interface LayoutPropsType extends RootAppDefaultPagePropsType {
   fullWidth?: boolean;
   /**
    * 고정된 minWidth 설정
-   * default 1170px
    */
   fixedMinWidth?: string | number | null;
 }
@@ -35,7 +34,7 @@ function Layout({
   headerOnlyLogo,
   children,
   fullWidth,
-  fixedMinWidth = '1170px',
+  fixedMinWidth,
 }: LayoutPropsType) {
   const minWidth = useMemo(() => {
     if (fullWidth) return null;
@@ -44,9 +43,14 @@ function Layout({
   return (
     <div>
       <div
-        style={{ 'minWidth' : minWidth ?? '100%', 'display' : 'flex', 'flexDirection' : 'column', 'height' : '100%'}}
+        style={{
+          minWidth: minWidth ?? '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+        }}
       >
-        {!hiddenHeader && (<Header/>)}
+        {!hiddenHeader && <Header />}
         <Main>{children}</Main>
         {!hiddenFooter && <Footer />}
       </div>
@@ -55,8 +59,6 @@ function Layout({
 }
 
 export default Layout;
-
-const Container = styled(Layout)``;
 
 const Main = styled.main`
   margin: 0 auto;

@@ -1,31 +1,25 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { loginProcAction } from '@/redux/reducers/auth';
 import { RootStateType } from '@/redux/reducers';
 import { useRouter } from 'next/dist/client/router';
-import { getDecodeToken } from '@/services/authService';
+import { loginProcAction } from '@/redux/reducers/auth';
+import { getDecodeToken } from '@/service/authService/lib';
 import localforage from 'localforage';
 
 function useLogin() {
-  const storage = localforage.createInstance({
-    name: 'id',
-    driver: localforage.LOCALSTORAGE,
-  });
-  const hookForm = useForm({
-    mode: 'onBlur',
-  });
-  const { setValue } = hookForm;
+  const hookForm = useForm();
+
   const dispatch = useDispatch();
   const router = useRouter();
-  const { loginResponse, loginLoading } = useSelector(
-    ({ auth: { loginProcResponse, loginProcLoading } }: RootStateType) => ({
-      loginResponse: loginProcResponse,
-      loginLoading: loginProcLoading,
-    }),
 
-    shallowEqual,
-  );
+  const storage = localforage.createInstance({
+    name: '_checkedId',
+    driver: localforage.LOCALSTORAGE,
+  });
+
+  const [isSaveIdChecked, setIsSaveIdChecked] = useState<boolean>(false);
+  const [isLoginSuccess, setIsLoginSuccess] = useState<boolean>(true);
 
   const handleLogin = useCallback(
     (formData) => {
@@ -34,17 +28,23 @@ function useLogin() {
     [dispatch],
   );
 
+  const { isLoadingLogin, loginResponse } = useSelector(
+    ({
+      auth: {
+        loginProcLoading: isLoadingLogin,
+        loginProcResponse: loginResponse,
+      },
+    }: RootStateType) => ({
+      isLoadingLogin,
+      loginResponse,
+    }),
+
+    shallowEqual,
+  );
+
   const clearLoginProc = useCallback(() => {
     dispatch(loginProcAction.cancel(0));
   }, [dispatch]);
-
-  const [isSaveIdChecked, setIsSaveIdChecked] = useState<boolean>(false);
-
-  const handleChangeSaveId = () => {
-    setIsSaveIdChecked(!isSaveIdChecked);
-  };
-
-  const [isLoginSuccess, setIsLoginSuccess] = useState<boolean>(true);
 
   const afterLogin = useCallback(() => {
     const { code, message } = loginResponse;
@@ -71,10 +71,9 @@ function useLogin() {
         break;
     }
     clearLoginProc();
-  }, [clearLoginProc, isSaveIdChecked, loginResponse, router]);
+  }, [clearLoginProc, isSaveIdChecked, loginResponse, router, storage]);
 
-  const checkLocalStorageHasId = useCallback(() => {}, []);
-
+  const { setValue } = hookForm;
   useEffect(() => {
     storage
       .getItem('_id')
@@ -93,15 +92,7 @@ function useLogin() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loginResponse]);
 
-  return {
-    hookForm,
-    handleLogin,
-    loginLoading,
-    isLoginSuccess,
-    handleChangeSaveId,
-    isSaveIdChecked,
-    checkLocalStorageHasId,
-  };
+  return { hookForm, handleLogin, isLoadingLogin };
 }
 
 export default useLogin;

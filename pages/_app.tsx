@@ -5,13 +5,15 @@ import configStore, { ReduxStoreType } from '@/redux/store';
 import Layout from '@/components/Layout';
 import { SWRConfig } from 'swr';
 import { swrFetcher } from '@/api';
+import { ThemeProvider } from '@mui/material/styles';
 // import { withAuthPage } from '@/services/authService';
-// import '@/styles/globals.css';
+import '@/styles/globals.css';
 // import '@/styles/react-big-calendar.css';
 // import 'react-virtualized/styles.css';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Persistor } from 'redux-persist/es/types';
 import { useStore } from 'react-redux';
+import { defaultTheme } from '@/styles/theme/default';
 // import usePersistSync from '@/hooks/usePersistSync';
 // import { PersistSyncStateType } from '@/redux/reducers/storage';
 // import { UIThemeProvider, getRedefTheme, theme } from 'web-sdk-ui';
@@ -47,7 +49,7 @@ function RootApp(appProps: AppProps) {
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
-        <title>에디트홈</title>
+        <title>react-moim</title>
       </Head>
       <PersistGate
         loading={null}
@@ -69,8 +71,8 @@ function PersistSyncApp({
   Component,
   pageProps,
   isSync,
-  // handlePersistSyncState,
-}: AppProps & {
+}: // handlePersistSyncState,
+AppProps & {
   isSync: boolean;
   // handlePersistSyncState: (state: PersistSyncStateType) => void;
 }) {
@@ -87,9 +89,11 @@ function PersistSyncApp({
           fetcher: swrFetcher,
         }}
       >
-        <Layout {...pageProps}>
-                <Component {...pageProps} />
-              </Layout>
+        <ThemeProvider theme={defaultTheme}>
+          <Layout {...pageProps}>
+            <Component {...pageProps} />
+          </Layout>
+        </ThemeProvider>
       </SWRConfig>
     </>
   );
