@@ -12,3 +12,5 @@ export const API_PREFIX = {
 };
 
 export type ApiPrefixType = typeof API_PREFIX;
+
+export const AUTH_SERVER_BASE_URL = 'http://localhost:3001';

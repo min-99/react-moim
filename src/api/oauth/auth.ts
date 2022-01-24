@@ -2,6 +2,7 @@ import { callApi } from '@/api';
 import { ApiResponseType } from '@/types';
 import { AxiosPromise } from 'axios';
 import { ApiPrefix } from '../config';
+import { AUTH_SERVER_BASE_URL } from '../prefix';
 
 export interface LoginRequestType {
   email: string;
@@ -23,7 +24,7 @@ export const login = (
   req: LoginRequestType,
 ): AxiosPromise<LoginResponseType> => {
   return callApi({
-    url: `${ApiPrefix.login.v1}`,
+    url: `${AUTH_SERVER_BASE_URL}/${ApiPrefix.login.v1}`,
     method: 'POST',
     data: req,
   });

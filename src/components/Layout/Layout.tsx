@@ -40,6 +40,10 @@ function Layout({
     if (fullWidth) return null;
     return fixedMinWidth;
   }, [fixedMinWidth, fullWidth]);
+  let mainStyled = {};
+  if (!hiddenFooter) {
+    mainStyled = { paddingBottom: '56px' };
+  }
   return (
     <div>
       <div
@@ -51,7 +55,7 @@ function Layout({
         }}
       >
         {!hiddenHeader && <Header />}
-        <Main>{children}</Main>
+        <Main style={mainStyled}>{children}</Main>
         {!hiddenFooter && <Footer />}
       </div>
     </div>
