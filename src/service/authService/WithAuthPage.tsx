@@ -51,7 +51,7 @@ function WithAuthPage<P extends {}>(
         );
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, hasLogoutRedirectUrl, router]);
+    }, [dispatch, hasLogoutRedirectUrl]);
 
     return <Component {...props} />;
   };
@@ -159,7 +159,6 @@ WithAuthPage.getServerSideProps = <
         .replace('.json', '')
         .replace(/^\/index$/, '/');
 
-      return {};
       return {
         redirect: {
           statusCode: 302,

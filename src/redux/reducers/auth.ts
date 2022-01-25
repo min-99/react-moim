@@ -70,7 +70,10 @@ export interface AuthStateType {
 
 export const initialState: AuthStateType = {
   loginProcLoading: false,
-  loginProcResponse: API_DEFAULT_RESPONSE,
+  loginProcResponse: {
+    accessToken: '',
+    refreshToken: '',
+  },
   isLogged: false,
   authInfo: null,
   hasLogoutRedirectUrl: true,
@@ -96,7 +99,10 @@ const AuthReducer = persistReducer(
         }
         case actionTypes.LOGIN_PROC_REQUEST: {
           draft.loginProcLoading = true;
-          draft.loginProcResponse = API_DEFAULT_RESPONSE;
+          draft.loginProcResponse = {
+            accessToken: '',
+            refreshToken: '',
+          };
           break;
         }
         case actionTypes.LOGIN_PROC_SUCCESS: {
@@ -111,7 +117,10 @@ const AuthReducer = persistReducer(
         }
         case actionTypes.LOGIN_PROC_CANCEL: {
           draft.loginProcLoading = false;
-          draft.loginProcResponse = API_DEFAULT_RESPONSE;
+          draft.loginProcResponse = {
+            accessToken: '',
+            refreshToken: '',
+          };
           break;
         }
         case actionTypes.LOGIN_SUCCESS: {

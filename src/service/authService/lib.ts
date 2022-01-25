@@ -108,8 +108,9 @@ export const shouldRefreshTokenCookieFromServer = (
   const aToken = getAccessTokenCookie(req, res);
   const rToken = getRefreshTokenCookie(req, res);
   if (aToken && rToken) {
-    const addMillSec = 30 * 60 * 1000; // 30 분
-    return expireToken(aToken, addMillSec);
+    // const addMillSec = 30 * 60 * 1000; // 30 분
+    // return expireToken(aToken, addMillSec);
+    return true;
   }
 
   if (!aToken && rToken) {
@@ -124,7 +125,7 @@ export const isAuthenticatedTokenCookieFromServer = (
   res: ServerResponseType,
 ) => {
   const aToken = getAccessTokenCookie(req, res);
-  return aToken ? !expireToken(aToken) : false;
+  return !!aToken;
 };
 
 /**
@@ -151,9 +152,9 @@ export const silentRefreshTokenCookieSyncStoreFromServer = async <
   const { data } = await refreshToken({
     token: topPriorityRefreshToken || getRefreshTokenCookie(req, res),
   });
-  if (data.code === 200) {
-    const accessToken = data?.data?.accessToken as string;
-    const refreshToken = data?.data?.refreshToken as string;
+  if (data.accessToken) {
+    const accessToken = data.accessToken as string;
+    const refreshToken = data.refreshToken as string;
     cookieLoginFromServer(req, res, {
       accessToken,
       refreshToken,

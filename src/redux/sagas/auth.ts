@@ -8,15 +8,14 @@ import {
   logoutSuccessAction,
 } from '@/redux/reducers/auth';
 import { relayLogin, relayLogout } from '@/api';
-import { API_DEFAULT_ERROR_RESPONSE } from '@/constants';
 import { isServer } from '@/utils';
 import { getDecodeToken } from '@/service/authService';
 
 function* loginProcSaga(action: AuthAction) {
   try {
     const { data } = yield call(relayLogin, { ...action.payload });
-    if (data?.code === 200) {
-      const { accessToken } = data?.data;
+    const { accessToken } = data;
+    if (accessToken) {
       yield put(loginProcAction.success(data));
       yield put(loginRequestAction({ accessToken }));
     } else {
@@ -24,7 +23,7 @@ function* loginProcSaga(action: AuthAction) {
     }
   } catch (error) {
     console.error('Error : ', error);
-    yield put(loginProcAction.failure(API_DEFAULT_ERROR_RESPONSE));
+    yield put(loginProcAction.failure({ accessToken: '', refreshToken: '' }));
   }
 }
 

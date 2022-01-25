@@ -37,10 +37,10 @@ function Login() {
   return (
     <Box padding="114px 50px" width="100%">
       <form onSubmit={handleSubmit(handleLogin)}>
-        {/* -- email -- */}
+        {/* -- username -- */}
         <Grid container spacing="5px">
           <Grid item xs={2}>
-            <Typography variant="h4">Email</Typography>
+            <Typography variant="h4">User Name</Typography>
           </Grid>
           <Grid item xs={10}>
             <TextField
@@ -48,23 +48,23 @@ function Login() {
               variant="standard"
               size="small"
               fullWidth
-              placeholder="Email"
-              {...register('email', {
+              placeholder="User Name"
+              {...register('username', {
                 required: {
                   value: true,
-                  message: '이메일을 입력해주세요',
+                  message: '사용자의 이름을 입력해주세요',
                 },
-                pattern: {
-                  value: REG_EXP.email,
-                  message: '유효하지 않은 이메일 형식입니다',
-                },
+                // pattern: {
+                //   value: REG_EXP.email,
+                //   message: '유효하지 않은 이메일 형식입니다',
+                // },
               })}
-              error={hasFieldError(errors, 'email')}
+              error={hasFieldError(errors, 'username')}
             />
           </Grid>
           <ErrorContainer
-            message={getFieldErrorMessage(errors, 'email')}
-            isShow={hasFieldError(errors, 'email')}
+            message={getFieldErrorMessage(errors, 'username')}
+            isShow={hasFieldError(errors, 'username')}
           />
 
           {/* -- password -- */}
@@ -84,11 +84,11 @@ function Login() {
                   value: true,
                   message: '비밀번호를 입력해주세요',
                 },
-                pattern: {
-                  value: REG_EXP.password,
-                  message:
-                    '비밀번호는 영문/숫자/특수문자 8 ~ 16자 이어야 합니다',
-                },
+                // pattern: {
+                //   value: REG_EXP.password,
+                //   message:
+                //     '비밀번호는 영문/숫자/특수문자 8 ~ 16자 이어야 합니다',
+                // },
               })}
               error={hasFieldError(errors, 'password')}
             />

@@ -1,10 +1,11 @@
 const SERVICE_PREFIX = {
-  login: 'login',
+  auth: 'auth',
   myMoim: 'myMoim',
 };
 export const API_PREFIX = {
-  login: {
-    v1: `/${SERVICE_PREFIX.login}`,
+  auth: {
+    login: `${SERVICE_PREFIX.auth}/login`,
+    refresh: `${SERVICE_PREFIX.auth}/refresh`,
   },
   myMoim: {
     v1: `/${SERVICE_PREFIX.myMoim}`,

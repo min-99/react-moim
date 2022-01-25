@@ -5,26 +5,20 @@ import { ApiPrefix } from '../config';
 import { AUTH_SERVER_BASE_URL } from '../prefix';
 
 export interface LoginRequestType {
-  email: string;
+  username: string;
   password: string;
 }
 
-export interface LoginResponseType extends ApiResponseType {
-  data?: LoginResponseDataType;
-}
-
-export interface LoginResponseDataType {
+export interface LoginResponseType {
   accessToken: string;
   refreshToken: string;
-  expiresIn: number;
-  companyName: string;
 }
 
 export const login = (
   req: LoginRequestType,
 ): AxiosPromise<LoginResponseType> => {
   return callApi({
-    url: `${AUTH_SERVER_BASE_URL}/${ApiPrefix.login.v1}`,
+    url: `${AUTH_SERVER_BASE_URL}/${ApiPrefix.auth.login}`,
     method: 'POST',
     data: req,
   });
@@ -53,25 +47,17 @@ export interface RefreshTokenRequestType {
   token: string;
 }
 export interface RefreshTokenResponseType extends ApiResponseType {
-  data?: {
-    accessToken: string;
-    refreshToken: string;
-    expiresIn: number;
-  };
+  accessToken: string;
+  refreshToken: string;
 }
 
 export const refreshToken = (
   req: RefreshTokenRequestType,
 ): AxiosPromise<RefreshTokenResponseType> => {
   return callApi({
-    url: `/token/refresh`,
+    url: `${AUTH_SERVER_BASE_URL}/${ApiPrefix.auth.refresh}`,
     method: 'GET',
     instanceType: 'Refresh',
     data: req,
-    config: {
-      headers: {
-        Authorization: `${process.env.NEXT_PUBLIC_BASIC_AUTH}`,
-      },
-    },
   });
 };

@@ -47,28 +47,21 @@ function useLogin() {
   }, [dispatch]);
 
   const afterLogin = useCallback(() => {
-    const { code, message } = loginResponse;
-    if (code === -1) return;
+    const { accessToken } = loginResponse;
+    if (!accessToken) return;
+    else {
+      if (isSaveIdChecked && loginResponse) {
+        const decodeToken = getDecodeToken(loginResponse.accessToken);
 
-    switch (code) {
-      case 200: {
-        if (isSaveIdChecked && loginResponse && loginResponse.data) {
-          const decodeToken = getDecodeToken(loginResponse.data.accessToken);
-
-          storage.setItem('_id', decodeToken.user_name);
-        } else {
-          storage.removeItem('_id');
-        }
-        if (router.query.redirectUrl) {
-          router.push(router.query.redirectUrl as string);
-        } else {
-          router.push('/');
-        }
-        break;
+        storage.setItem('_id', decodeToken.user_name);
+      } else {
+        storage.removeItem('_id');
       }
-      default:
-        setIsLoginSuccess(false);
-        break;
+      if (router.query.redirectUrl) {
+        router.push(router.query.redirectUrl as string);
+      } else {
+        router.push('/');
+      }
     }
     clearLoginProc();
   }, [clearLoginProc, isSaveIdChecked, loginResponse, router, storage]);
