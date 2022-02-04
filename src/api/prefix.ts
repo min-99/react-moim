@@ -8,10 +8,8 @@ export const API_PREFIX = {
     refresh: `${SERVICE_PREFIX.auth}/refresh`,
   },
   myMoim: {
-    v1: `/${SERVICE_PREFIX.myMoim}`,
+    v1: `/myMoims`,
   },
 };
 
 export type ApiPrefixType = typeof API_PREFIX;
-
-export const AUTH_SERVER_BASE_URL = 'http://localhost:3001';

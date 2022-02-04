@@ -11,9 +11,7 @@ function MyMoim() {
     <Box padding="15px 19px" width="100%">
       <Typography variant="h2">내 모임</Typography>
       <Box>
-        <List
-          sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-        >
+        <List sx={{ width: '100%' }}>
           {isLoadingMyMoimList ? (
             <>
               <Skeleton height="70px" />
@@ -21,15 +19,16 @@ function MyMoim() {
               <Skeleton height="70px" />
             </>
           ) : (
-            myMoimList.map((item) => {
+            myMoimList.map((obj) => {
               return (
                 <MoimListItem
-                  key={item.id}
-                  moimImage={item.image}
-                  area={item.area}
-                  moimLoction={item.moimLoction}
-                  moimName={item.moimName}
-                  moimMemberCount={item.moimMemberCount}
+                  key={obj.id}
+                  moimId={obj.id}
+                  moimImage={obj.image}
+                  area={obj.area}
+                  moimLoction={obj.area}
+                  moimName={obj.moimName}
+                  moimMemberCount={obj.moimMemberCount}
                 />
               );
             })

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { wrapper, ReduxStoreType } from '@/redux/store';
-import { useRouter } from 'next/dist/client/router';
+import { useRouter } from 'next/router';
 import {
   GetServerSidePropsContext,
   GetServerSidePropsResult,
@@ -25,8 +25,9 @@ import {
   shouldRefreshTokenCookieFromServer,
   silentRefreshTokenCookieSyncStoreFromServer,
 } from './lib';
-import { useDispatch } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import useHasLogoutRedirectUrlHandler from '@/hooks/useHasLogoutRedirectUrlHandler';
+import { RootStateType } from '@/redux/reducers';
 
 export interface WithAuthRouteOptionsType {
   doNotAuth?: boolean;
@@ -40,18 +41,25 @@ function WithAuthPage<P extends {}>(
     const { hasLogoutRedirectUrl } = useHasLogoutRedirectUrlHandler();
     const dispatch = useDispatch();
     const router = useRouter();
+    // const routerRef = useRef(router);
+
+    const { isLogged } = useSelector(
+      ({ auth: { isLogged } }: RootStateType) => ({
+        isLogged,
+      }),
+      shallowEqual,
+    );
 
     useEffect(() => {
       const { doNotAuth } = options;
-      if (!doNotAuth) {
+      if (!doNotAuth && !isLogged) {
         router.push(
           hasLogoutRedirectUrl
             ? getLoginPageUrlWithRedirect(router.asPath)
             : '/login',
         );
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, hasLogoutRedirectUrl]);
+    }, [dispatch, hasLogoutRedirectUrl, isLogged, router]);
 
     return <Component {...props} />;
   };
@@ -80,12 +88,13 @@ WithAuthPage.getInitialAppProps = (
     const req = ctx.req as IncomingMessage;
     const res = ctx.res as ServerResponse;
     console.log('syncTokenCookieToStore');
-    if (isAuthenticatedTokenCookieFromServer(req, res))
+    if (isAuthenticatedTokenCookieFromServer(req, res)) {
       store.dispatch(
         loginRequestAction({
           accessToken: getAccessTokenCookie(req, res),
         }),
       );
+    }
   };
   return wrapper.getInitialAppProps(
     (store) =>
@@ -175,12 +184,7 @@ WithAuthPage.getServerSideProps = <
         }>({
           req,
           res,
-          success: ({
-            data: { accessToken, refreshToken = '' } = {
-              accessToken: '',
-              refreshToken: '',
-            },
-          }) => {
+          success: ({ accessToken, refreshToken = '' }) => {
             store.dispatch(
               loginRequestAction({
                 accessToken: accessToken as string,

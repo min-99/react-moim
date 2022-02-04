@@ -45,7 +45,7 @@ function* logoutSaga() {
     yield put(logoutSuccessAction(0));
   } else {
     const { data } = yield call(relayLogout);
-    if (data?.code === 200) {
+    if (data.accessToken) {
       yield put(logoutSuccessAction(0));
     }
   }

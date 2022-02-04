@@ -6,15 +6,19 @@ import axios, {
   AxiosResponse,
   Method,
 } from 'axios';
-import { ApiPrefixType, API_PREFIX } from './prefix';
 import { Store } from 'redux';
+import { RootStateType } from '@/redux/reducers/index';
+import { loginRequestAction, logoutRequestAction } from '@/redux/reducers/auth';
 import { isClient } from '@/utils';
+import { replayRefreshToken } from '@/api';
 import Router from 'next/router';
+import { ApiPrefixType, API_PREFIX } from './prefix';
 import {
   API_CODE_NOT_FOUND,
   API_CODE_SHUTDOWN,
   API_CODE_UNAUTHORIZED,
 } from '@/constants';
+import { getLoginPageUrlWithRedirect } from '@/service/authService';
 
 const createInstance = (config?: AxiosRequestConfig) => {
   const defaultTimeoutMillSec = 60 * 1000; // 60초
@@ -63,6 +67,20 @@ export const setupAxios = ({
 
   const requestInterceptor =
     (store: Store) => (config: CustomInterceptorRequestConfig) => {
+      // tracking 정보 추가
+      config.headers = {
+        ...config.headers,
+      };
+
+      const auth = (store.getState() as RootStateType).auth;
+      // 인증처리
+      if (auth.isLogged && auth.authInfo?.accessToken) {
+        config.headers = {
+          ...config.headers,
+          Authorization: `Bearer ${auth.authInfo?.accessToken}`,
+        };
+      }
+
       return config;
     };
 
@@ -92,7 +110,7 @@ export const setupAxios = ({
     (store: Store) =>
     async (response: AxiosResponse): Promise<AxiosResponse> => {
       const originalRequest = response.config as CustomInterceptorRequestConfig;
-      // loggingForResponse(response);
+      loggingForResponse(response);
 
       const isRetry =
         isExpireTokenByStatusCode(response?.data?.code) &&
@@ -101,7 +119,7 @@ export const setupAxios = ({
       if (isRetry) {
         originalRequest._retry = true;
         const isSuccess = await refreshTokenForClientProc({ store });
-        //   console.log('client token refresh : ', isSuccess);
+        console.log('client token refresh : ', isSuccess);
         if (isSuccess) return instance?.({ ...originalRequest });
       }
 
@@ -137,17 +155,17 @@ export const refreshTokenForClientProc = async ({
 }: {
   store: Store;
 }): Promise<boolean> => {
-  // const { data } = await replayRefreshToken();
-  // if (data.code === 200) {
-  //   store.dispatch(
-  //     loginRequestAction({
-  //       accessToken: data?.data?.accessToken as string,
-  //     }),
-  //   );
-  //   return true;
-  // }
-  // store.dispatch(logoutRequestAction(0));
-  // Router.push(getLoginPageUrlWithRedirect(Router.asPath));
+  const { data } = await replayRefreshToken();
+  if (data.accessToken) {
+    store.dispatch(
+      loginRequestAction({
+        accessToken: data?.data?.accessToken as string,
+      }),
+    );
+    return true;
+  }
+  store.dispatch(logoutRequestAction(0));
+  Router.push(getLoginPageUrlWithRedirect(Router.asPath));
   return false;
 };
 

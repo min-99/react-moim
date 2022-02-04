@@ -4,22 +4,29 @@ import querystring from 'query-string';
 
 export interface GetMyMoimRequestType {
   page: number;
+  size: number;
+  sort: string;
 }
 
 export interface GetMyMoimResponseType extends ApiResponseType {
-  data?: Array<GetMyMoimResponseDataType>;
+  data?: GetMyMoimResponseDataType;
 }
 
 export interface GetMyMoimResponseDataType {
+  totalCount: number;
+  hasMore: boolean;
+  items: GetMyMoimItemResponseType[];
+}
+
+export interface GetMyMoimItemResponseType {
   id: number;
   image: string;
-  area: string;
-  moimLoction: string;
   moimName: string;
+  area: string;
   moimMemberCount: number;
 }
 
 export const getMyMoimListUrlWithQuery = (req: GetMyMoimRequestType) => {
   const query = querystring.stringify(req);
-  return `${ApiPrefix.myMoim.v1}?${query}`;
+  return `${process.env.NEXT_PUBLIC_BASE_API_URL}${ApiPrefix.myMoim.v1}?${query}`;
 };

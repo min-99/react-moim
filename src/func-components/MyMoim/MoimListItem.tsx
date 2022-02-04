@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import SportsTennisOutlinedIcon from '@mui/icons-material/SportsTennisOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import {
@@ -9,8 +9,10 @@ import {
   Typography,
 } from '@mui/material';
 import { blue } from '@mui/material/colors';
+import { useRouter } from 'next/router';
 
 interface MoimListItemPropsType {
+  moimId: number;
   moimImage: string;
   area: string;
   moimLoction: string;
@@ -19,14 +21,27 @@ interface MoimListItemPropsType {
 }
 
 function MoimListItem({
+  moimId,
   moimImage,
   area,
   moimLoction,
   moimName,
   moimMemberCount,
 }: MoimListItemPropsType) {
+  const router = useRouter();
+  const goToMyMoimDetail = useCallback((moimId: number) => {
+    router.push(`/myMoim/${moimId}`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <ListItem alignItems="flex-start" style={{ padding: '0', margin: 'auto' }}>
+    <ListItem
+      alignItems="flex-start"
+      style={{ padding: '0', margin: 'auto' }}
+      onClick={() => {
+        goToMyMoimDetail(moimId);
+      }}
+    >
       <ListItemAvatar>
         <Avatar
           alt="dog-moim"

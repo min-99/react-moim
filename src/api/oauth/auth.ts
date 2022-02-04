@@ -2,7 +2,6 @@ import { callApi } from '@/api';
 import { ApiResponseType } from '@/types';
 import { AxiosPromise } from 'axios';
 import { ApiPrefix } from '../config';
-import { AUTH_SERVER_BASE_URL } from '../prefix';
 
 export interface LoginRequestType {
   username: string;
@@ -18,7 +17,7 @@ export const login = (
   req: LoginRequestType,
 ): AxiosPromise<LoginResponseType> => {
   return callApi({
-    url: `${AUTH_SERVER_BASE_URL}/${ApiPrefix.auth.login}`,
+    url: `/${ApiPrefix.auth.login}`,
     method: 'POST',
     data: req,
   });
@@ -55,9 +54,18 @@ export const refreshToken = (
   req: RefreshTokenRequestType,
 ): AxiosPromise<RefreshTokenResponseType> => {
   return callApi({
-    url: `${AUTH_SERVER_BASE_URL}/${ApiPrefix.auth.refresh}`,
+    url: `/${ApiPrefix.auth.refresh}`,
     method: 'GET',
     instanceType: 'Refresh',
     data: req,
   });
 };
+
+export const replayRefreshToken =
+  (): AxiosPromise<RefreshTokenResponseType> => {
+    return callApi({
+      url: '/token',
+      method: 'POST',
+      instanceType: 'Relay',
+    });
+  };
