@@ -43,6 +43,12 @@ export const defaultTheme = createTheme({
     h6: {
       fontSize: 14,
     },
+    subtitle1: {
+      fontSize: 12,
+    },
+    subtitle2: {
+      fontSize: 10,
+    },
     caption: {
       fontSize: 8,
     },
