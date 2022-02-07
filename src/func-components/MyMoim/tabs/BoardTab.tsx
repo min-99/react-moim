@@ -1,6 +1,10 @@
 import React from 'react';
 
-const BoardTab = () => {
+interface BoardTabPropsType {
+  moimId: number;
+}
+
+const BoardTab = ({ moimId }: BoardTabPropsType) => {
   return <div>게시판 탭입니다.</div>;
 };
 

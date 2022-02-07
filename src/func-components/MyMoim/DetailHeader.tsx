@@ -8,21 +8,26 @@ import { Tab, Tabs, Typography } from '@mui/material';
 import { TabType } from '@/types/myMoim';
 
 interface DetailHeaderPropsType {
+  moimName: string;
   selectTab: TabType;
   handleChange: (event: React.SyntheticEvent, newValue: TabType) => void;
 }
 
-const DetailHeader = ({ selectTab, handleChange }: DetailHeaderPropsType) => {
+const DetailHeader = ({
+  moimName,
+  selectTab,
+  handleChange,
+}: DetailHeaderPropsType) => {
   return (
-    <>
-      <SHeader>
+    <SDetailHeader>
+      <div className="header">
         <ArrowBackIosNewRoundedIcon
           style={{ margin: '0px 2px', paddingTop: '8px', paddingLeft: '2px' }}
           sx={{ fontSize: 23 }}
         />
-        <div className="title">
+        <div className="header_title">
           <Typography variant="h4" style={{ padding: '4px 0px' }}>
-            배드민턴 포텐셜
+            {moimName}
           </Typography>
         </div>
         <FavoriteBorderRoundedIcon
@@ -34,7 +39,7 @@ const DetailHeader = ({ selectTab, handleChange }: DetailHeaderPropsType) => {
         <MoreVertOutlinedIcon
           style={{ margin: '0px 2px', paddingTop: '5px', paddingLeft: '2px' }}
         />
-      </SHeader>
+      </div>
       <Tabs value={selectTab} onChange={handleChange}>
         <Tab
           value={'info' as TabType}
@@ -57,15 +62,17 @@ const DetailHeader = ({ selectTab, handleChange }: DetailHeaderPropsType) => {
           style={{ minWidth: 'auto' }}
         />
       </Tabs>
-    </>
+    </SDetailHeader>
   );
 };
 
-const SHeader = styled.div`
-  flex-wrap: nowrap;
-  display: flex;
+const SDetailHeader = styled.div`
+  & .header {
+    flex-wrap: nowrap;
+    display: flex;
+  }
 
-  & .title {
+  & .header_title {
     flex: 1;
     padding-top: 4px;
     margin: 0px 5px;

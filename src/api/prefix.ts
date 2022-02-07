@@ -8,7 +8,7 @@ export const API_PREFIX = {
     refresh: `${SERVICE_PREFIX.auth}/refresh`,
   },
   myMoim: {
-    v1: `/myMoims`,
+    v1: `/${SERVICE_PREFIX.myMoim}`,
   },
 };
 

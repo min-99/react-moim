@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useMemo } from 'react';
-import { getMyMoimListUrlWithQuery, GetMyMoimResponseType } from '@/api/myMoim';
+import {
+  getMyMoimListUrlWithQuery,
+  GetMyMoimListResponseType,
+} from '@/api/myMoim';
 import { KeyLoader } from 'swr';
 import useSWRInfinite from 'swr/infinite';
 import axios from 'axios';
@@ -36,11 +39,11 @@ function useMyMoim() {
     size: apiMyMoimListSize,
     setSize: setApiMyMoimListSize,
     isValidating: isLoadingMyMoimList,
-  } = useSWRInfinite<GetMyMoimResponseType>(getKey, fetcher);
+  } = useSWRInfinite<GetMyMoimListResponseType>(getKey, fetcher);
 
   const myMoimList = useMemo(() => {
     const response = apiMyMoimListResponse?.map((response) => {
-      return (response as GetMyMoimResponseType).data?.items;
+      return (response as GetMyMoimListResponseType).data?.items;
     });
     return (
       response?.reduce((prev = [], accumulator = []) =>
