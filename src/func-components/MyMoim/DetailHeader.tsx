@@ -1,11 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
-import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
-import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
-import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
-import { Tab, Tabs, Typography } from '@mui/material';
+import { Tab, Tabs } from '@mui/material';
 import { TabType } from '@/types/myMoim';
+import AppHeader from '@/components/AppHeader/AppHeader';
 
 interface DetailHeaderPropsType {
   moimName: string;
@@ -20,26 +17,7 @@ const DetailHeader = ({
 }: DetailHeaderPropsType) => {
   return (
     <SDetailHeader>
-      <div className="header">
-        <ArrowBackIosNewRoundedIcon
-          style={{ margin: '0px 2px', paddingTop: '8px', paddingLeft: '2px' }}
-          sx={{ fontSize: 23 }}
-        />
-        <div className="header_title">
-          <Typography variant="h4" style={{ padding: '4px 0px' }}>
-            {moimName}
-          </Typography>
-        </div>
-        <FavoriteBorderRoundedIcon
-          style={{ margin: '0px 2px', paddingTop: '5px', paddingLeft: '2px' }}
-        />
-        <ShareOutlinedIcon
-          style={{ margin: '0px 2px', paddingTop: '5px', paddingLeft: '2px' }}
-        />
-        <MoreVertOutlinedIcon
-          style={{ margin: '0px 2px', paddingTop: '5px', paddingLeft: '2px' }}
-        />
-      </div>
+      <AppHeader title={moimName} />
       <Tabs value={selectTab} onChange={handleChange}>
         <Tab
           value={'info' as TabType}
@@ -67,18 +45,6 @@ const DetailHeader = ({
 };
 
 const SDetailHeader = styled.div`
-  & .header {
-    flex-wrap: nowrap;
-    display: flex;
-  }
-
-  & .header_title {
-    flex: 1;
-    padding-top: 4px;
-    margin: 0px 5px;
-    display: inline-block;
-  }
-
   & .MuiTabs-flexContainer {
     justify-content: 'space-between';
   }

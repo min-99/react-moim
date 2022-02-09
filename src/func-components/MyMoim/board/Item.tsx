@@ -1,12 +1,19 @@
 import { Avatar, Typography } from '@mui/material';
 import React from 'react';
 import style from 'styled-components';
-import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
-import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
+
+import { useRouter } from 'next/router';
+import LikeText from '@/components/LikeText';
+import CommentText from '@/components/CommentText';
 
 const Item = () => {
+  const router = useRouter();
   return (
-    <SItem>
+    <SItem
+      onClick={() => {
+        router.push('/myMoim/1/board/1');
+      }}
+    >
       <div className="boardList_top">
         <Avatar
           alt="image"
@@ -44,55 +51,8 @@ const Item = () => {
         </Typography>
       </div>
       <div className="boardList_bottom">
-        <div className="like_container">
-          <ThumbUpAltOutlinedIcon
-            style={{ width: '18px', height: '15px', padding: '3px' }}
-          />
-          <Typography
-            variant="subtitle1"
-            component="div"
-            style={{ display: 'inline-block', verticalAlign: 'super' }}
-          >
-            좋아요
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            component="div"
-            color="blue"
-            style={{
-              display: 'inline-block',
-              verticalAlign: 'super',
-              padding: '0px 3px',
-            }}
-          >
-            6
-          </Typography>
-        </div>
-
-        <div className="comment_container">
-          <ModeCommentOutlinedIcon
-            style={{ width: '18px', height: '15px', padding: '3px' }}
-          />
-          <Typography
-            variant="subtitle1"
-            component="div"
-            style={{ display: 'inline-block', verticalAlign: 'super' }}
-          >
-            댓글
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            component="div"
-            color="blue"
-            style={{
-              display: 'inline-block',
-              verticalAlign: 'super',
-              padding: '0px 3px',
-            }}
-          >
-            1
-          </Typography>
-        </div>
+        <LikeText isLike={false} count={0} />
+        <CommentText count={0} />
         <Typography
           variant="subtitle1"
           component="div"
@@ -117,12 +77,6 @@ const SItem = style.div`
         border-top: 1px solid aliceblue;
         padding: 4px 0px;
         margin-top: 10px;
-        & .like_container {
-            display: inline-block;
-        }
-        & .comment_container {
-            display: inline-block;
-        }
     }
 
     & + & {

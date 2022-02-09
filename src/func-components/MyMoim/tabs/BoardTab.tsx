@@ -6,7 +6,7 @@ import {
   SelectChangeEvent,
 } from '@mui/material';
 import React from 'react';
-import BoardList from '../BoardList';
+import BoardList from '../board/BoardList';
 import style from 'styled-components';
 
 interface BoardTabPropsType {
