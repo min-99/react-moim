@@ -5,7 +5,7 @@ import { Avatar, Typography } from '@mui/material';
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import LikeText from '@/components/LikeText';
 import CommentText from '@/components/CommentText';
-import CommentList from '../comment/commentList';
+import CommentList from '../comment/CommentList';
 
 interface BoardDetailPropsType {
   moimId: number;

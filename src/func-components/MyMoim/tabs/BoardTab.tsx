@@ -1,24 +1,18 @@
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import React from 'react';
 import BoardList from '../board/BoardList';
 import style from 'styled-components';
+import useBoardTab from './hooks/useBoardTab';
 
 interface BoardTabPropsType {
   moimId: number;
 }
 
 const BoardTab = ({ moimId }: BoardTabPropsType) => {
-  const [category, setCategory] = React.useState<string>('');
+  const { categoryListApiResponse, categoryId, handleChange } = useBoardTab({
+    moimId,
+  });
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setCategory(event.target.value as string);
-  };
   return (
     <SBoardTab>
       <div className="boardTab_top">
@@ -27,18 +21,20 @@ const BoardTab = ({ moimId }: BoardTabPropsType) => {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={category}
+            value={categoryId}
             label="category"
             onChange={handleChange}
           >
-            <MenuItem value={1}>자유글</MenuItem>
-            <MenuItem value={2}>공지사항</MenuItem>
-            <MenuItem value={3}>가입인사</MenuItem>
+            {categoryListApiResponse?.map((obj) => (
+              <MenuItem key={obj.id} value={obj.id}>
+                {obj.name}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       </div>
       <div className="boardList_content">
-        <BoardList moimId={moimId}></BoardList>
+        <BoardList moimId={moimId} categoryId={Number(categoryId)}></BoardList>
       </div>
     </SBoardTab>
   );

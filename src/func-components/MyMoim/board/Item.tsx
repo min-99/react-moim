@@ -5,19 +5,30 @@ import style from 'styled-components';
 import { useRouter } from 'next/router';
 import LikeText from '@/components/LikeText';
 import CommentText from '@/components/CommentText';
+import { GetBoardItemResponseDataType } from '@/api/myMoim/board';
 
-const Item = () => {
+const Item = ({
+  moimId,
+  profileImage,
+  memberName,
+  title,
+  createDate,
+  updateDate,
+  boardCategory,
+  boardImage,
+  likeCount,
+}: GetBoardItemResponseDataType & { moimId: number }) => {
   const router = useRouter();
   return (
     <SItem
       onClick={() => {
-        router.push('/myMoim/1/board/1');
+        router.push(`/myMoim/${moimId}/board/1`);
       }}
     >
       <div className="boardList_top">
         <Avatar
-          alt="image"
-          src="https://img.khan.co.kr/news/2019/11/29/l_2019112901003607500286631.jpg"
+          alt={memberName}
+          src={profileImage}
           sx={{ width: 24, height: 24 }}
           style={{ display: 'inline-block' }}
         />
@@ -29,7 +40,7 @@ const Item = () => {
             paddingLeft: '8px',
           }}
         >
-          탁민주
+          {memberName}
         </Typography>
         <Typography
           variant="h6"
@@ -39,19 +50,19 @@ const Item = () => {
             float: 'right',
           }}
         >
-          2월 6일 오후 10시 50분
+          {updateDate}
         </Typography>
       </div>
       <div className="boardList_middle">
         <Typography variant="h6" className="boardList_title">
-          안녕하세요 :)
+          {title}
         </Typography>
         <Typography variant="h6" className="boardList_content">
-          - 이름 : 탁민주
+          (내용 줄여서 보여줄 예정)
         </Typography>
       </div>
       <div className="boardList_bottom">
-        <LikeText isLike={false} count={0} />
+        <LikeText isLike={false} count={likeCount} />
         <CommentText count={0} />
         <Typography
           variant="subtitle1"
@@ -63,7 +74,7 @@ const Item = () => {
             marginRight: '10px',
           }}
         >
-          자유글
+          {boardCategory.name}
         </Typography>
       </div>
     </SItem>

@@ -1,6 +1,7 @@
 const SERVICE_PREFIX = {
   auth: 'auth',
   myMoim: 'myMoim',
+  board: 'board',
 };
 export const API_PREFIX = {
   auth: {
@@ -9,6 +10,9 @@ export const API_PREFIX = {
   },
   myMoim: {
     v1: `/${SERVICE_PREFIX.myMoim}`,
+  },
+  board: {
+    v1: `/${SERVICE_PREFIX.board}`,
   },
 };
 

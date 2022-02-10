@@ -1,10 +1,22 @@
+import { GetRequireBoardListResponseDataType } from '@/api/myMoim/board';
 import { Typography } from '@mui/material';
+import { useRouter } from 'next/router';
 import React from 'react';
 import style from 'styled-components';
 
-const RequireItem = () => {
+const RequireItem = ({
+  moimId,
+  boardId,
+  title,
+}: GetRequireBoardListResponseDataType & { moimId: number }) => {
+  const router = useRouter();
   return (
-    <SRequireItem>
+    <SRequireItem
+      data-id={boardId}
+      onClick={() => {
+        router.push(`/myMoim/${moimId}/board/${boardId}`);
+      }}
+    >
       <div className="require_icon">
         <Typography variant="h6" noWrap color="blue">
           [필독]
@@ -12,7 +24,7 @@ const RequireItem = () => {
       </div>
       <div className="require_content">
         <Typography variant="h6" noWrap>
-          가입자 자기소개서 양식
+          {title}
         </Typography>
       </div>
     </SRequireItem>
