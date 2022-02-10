@@ -5,6 +5,7 @@ import { Avatar, Typography } from '@mui/material';
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import LikeText from '@/components/LikeText';
 import CommentText from '@/components/CommentText';
+import CommentList from '../comment/commentList';
 
 interface BoardDetailPropsType {
   moimId: number;
@@ -96,6 +97,7 @@ const BoardDetail = ({ moimId, boardId }: BoardDetailPropsType) => {
           <LikeText isLike={false} count={0} />
           <CommentText count={0} />
         </div>
+        <CommentList />
       </div>
     </SBoardDetail>
   );
