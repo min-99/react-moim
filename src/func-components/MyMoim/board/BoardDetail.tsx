@@ -31,7 +31,7 @@ const BoardDetail = ({ moimId, boardId }: BoardDetailPropsType) => {
                 display: 'inline-block',
               }}
             >
-              탁민주
+              김길동
             </Typography>
             <Typography
               variant="h6"
@@ -73,13 +73,13 @@ const BoardDetail = ({ moimId, boardId }: BoardDetailPropsType) => {
             -------자기소개서 양식(필수입력사항)--------
             <br />
             <br />
-            - 이름 : 탁민주 <br />
+            - 이름 : 김길동 <br />
             <br />
-            - 나이 : 24 <br />
+            - 나이 : 20 <br />
             <br />
             - 구력 : 1년 <br />
             <br />
-            - 거주지역 : 관악구 <br />
+            - 거주지역 : 강남구 <br />
             <br />
             - 참석요일 : 주말 <br />
             <br />

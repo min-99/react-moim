@@ -23,7 +23,7 @@ const Item = () => {
                 paddingLeft: '8px',
               }}
             >
-              탁민주
+              김길동
             </Typography>
             <Typography
               variant="h6"
