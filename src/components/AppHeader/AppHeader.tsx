@@ -5,18 +5,23 @@ import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import { Typography } from '@mui/material';
+import { useRouter } from 'next/router';
 
 interface DetailHeaderPropsType {
   title: string;
 }
 
 const AppHeader = ({ title }: DetailHeaderPropsType) => {
+  const router = useRouter();
   return (
     <SAppHeader>
       <div className="header">
         <ArrowBackIosNewRoundedIcon
           style={{ margin: '0px 2px', paddingTop: '8px', paddingLeft: '2px' }}
           sx={{ fontSize: 23 }}
+          onClick={() => {
+            router.back();
+          }}
         />
         <div className="header_title">
           <Typography variant="h4" style={{ padding: '4px 0px' }}>
